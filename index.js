@@ -81,12 +81,12 @@ export const startUpload = (options: StartUploadArgs): Promise<string> => Native
 Gets upload by string ID.
 
 Upload ID is returned in a promise after a call to startUpload method,
-use it to cancel started upload.
+use it to query the upload status.
 
 Returns a promise with boolean true if operation was successfully completed.
 Will reject if there was an internal error or ID format is invalid.
 */
-export const getUpload = (uploadId: string): Promise<boolean> => {
+export const getUpload = (uploadId: string): Promise<{state: number}> => {
   if (typeof uploadId !== 'string') {
     return Promise.reject(new Error('Upload ID must be a string'));
   }
@@ -129,4 +129,4 @@ export const addListener = (eventType: UploadEvent, uploadId: string, listener: 
   })
 }
 
-export default { startUpload, cancelUpload, addListener, getFileInfo }
+export default { startUpload, cancelUpload, addListener, getFileInfo, getUpload }
