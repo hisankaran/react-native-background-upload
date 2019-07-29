@@ -218,21 +218,19 @@ RCT_EXPORT_METHOD(startUpload:(NSDictionary *)options resolve:(RCTPromiseResolve
 }
 
 /*
- * Gets file upload
- * Accepts upload ID as a first argument, this upload will be cancelled
- * Event "cancelled" will be fired when upload is cancelled.
+ * Gets file upload by id
+ * Accepts upload ID as a first argument, and returns the current state
+ * Ref: https://developer.apple.com/documentation/foundation/nsurlsessiontaskstate?language=objc
  */
 RCT_EXPORT_METHOD(getUpload: (NSString *)uploadId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     [_urlSession getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
         for (NSURLSessionTask *uploadTask in uploadTasks) {
             if ([uploadTask.taskDescription isEqualToString:uploadId]){
-                NSLog(@"%ld", uploadTask.state);
-                // == checks if references are equal, while isEqualToString checks the string value
-//                [uploadTask cancel];
+                return resolve(@{@"state": [NSNumber numberWithInteger:uploadTask.state]});
             }
         }
+        resolve(@{@"state": [NSNumber numberWithShort:-1]});
     }];
-    resolve([NSNumber numberWithBool:YES]);
 }
 
 /*
