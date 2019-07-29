@@ -218,6 +218,24 @@ RCT_EXPORT_METHOD(startUpload:(NSDictionary *)options resolve:(RCTPromiseResolve
 }
 
 /*
+ * Gets file upload
+ * Accepts upload ID as a first argument, this upload will be cancelled
+ * Event "cancelled" will be fired when upload is cancelled.
+ */
+RCT_EXPORT_METHOD(getUpload: (NSString *)uploadId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    [_urlSession getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
+        for (NSURLSessionTask *uploadTask in uploadTasks) {
+            if ([uploadTask.taskDescription isEqualToString:uploadId]){
+                NSLog(@"%ld", uploadTask.state);
+                // == checks if references are equal, while isEqualToString checks the string value
+//                [uploadTask cancel];
+            }
+        }
+    }];
+    resolve([NSNumber numberWithBool:YES]);
+}
+
+/*
  * Cancels file upload
  * Accepts upload ID as a first argument, this upload will be cancelled
  * Event "cancelled" will be fired when upload is cancelled.
