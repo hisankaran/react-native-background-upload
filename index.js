@@ -82,9 +82,6 @@ Gets upload by string ID.
 
 Upload ID is returned in a promise after a call to startUpload method,
 use it to query the upload status.
-
-Returns a promise with boolean true if operation was successfully completed.
-Will reject if there was an internal error or ID format is invalid.
 */
 export const getUpload = (uploadId: string): Promise<{state: number}> => {
   if (typeof uploadId !== 'string') {
